@@ -1,0 +1,12 @@
+version: "3"
+services:
+  php-without-prooph:
+    image: php:proto
+    build:
+      context: devops
+      dockerfile: Dockerfile.php-proto
+    volumes:
+      - ./php-without-prooph:/app
+      - ./protobuffers:/proto
+    working_dir: /app
+

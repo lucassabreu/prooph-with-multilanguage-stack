@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package hooks.commands;
+
+message SendEmail {
+	string email = 1;
+}
