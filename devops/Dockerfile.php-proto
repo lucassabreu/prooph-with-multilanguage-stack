@@ -1,6 +1,29 @@
 FROM php:7.1.7-alpine
 
-RUN apk add --update --no-cache $PHPIZE_DEPS autoconf automake libtool make gcc && \
+RUN apk add --update --no-cache $PHPIZE_DEPS && \
 	pecl install protobuf && \
-	docker-php-ext-enable protobuf
+	docker-php-ext-enable protobuf && \
+	apk del $PHPIZE_DEPS
 
+ENV RABBITMQ_VERSION v0.8.0
+ENV PHP_AMQP_VERSION v1.9.0
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git cmake openssl-dev \
+	&& git clone --branch ${RABBITMQ_VERSION} https://github.com/alanxz/rabbitmq-c.git /tmp/rabbitmq \
+		&& cd /tmp/rabbitmq \
+		&& mkdir build && cd build \
+		&& cmake .. \
+		&& cmake --build . --target install \
+		# workaround for linking issue
+		&& cp -r /usr/local/lib64/* /usr/lib/ \
+	&& git clone --branch ${PHP_AMQP_VERSION} https://github.com/pdezwart/php-amqp.git /tmp/php-amqp \
+		&& cd /tmp/php-amqp \
+		&& phpize \
+		&& ./configure \
+		&& make  \
+		&& make install \
+		&& make test \
+	&& docker-php-ext-enable amqp \
+	&& apk del .build-deps && rm -rf /tmp/*
+
+RUN curl -L https://getcomposer.org/composer.phar -o /usr/local/bin/composer && \
+	chmod +x /usr/local/bin/composer

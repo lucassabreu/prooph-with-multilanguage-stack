@@ -8,6 +8,11 @@ services:
     volumes:
       - ./without-prooph:/app
     working_dir: /app
+    ports:
+      - 80:80
+    command: composer run --timeout=0 serve --dev
+    links:
+      - rabbitmq:rabbitmq
   with-prooph:
     image: php:proto
     build:
@@ -16,3 +21,15 @@ services:
     volumes:
       - ./with-prooph:/app
     working_dir: /app
+    links:
+      - rabbitmq:rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-with-delay
+    build:
+      context: devops
+      dockerfile: Dockerfile.rabbitmq
+    ports:
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
