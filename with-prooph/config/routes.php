@@ -28,3 +28,4 @@
 
 $app->get('/', App\Action\HomePageAction::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
+$app->get('/command/echo-text', \App\Action\EchoTextAction::class, 'command.echo_text');

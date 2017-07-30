@@ -9,7 +9,7 @@ services:
       - ./without-prooph:/app
     working_dir: /app
     ports:
-      - 80:80
+      - 80:8080
     command: composer run --timeout=0 serve --dev
     links:
       - rabbitmq:rabbitmq
@@ -23,6 +23,9 @@ services:
     working_dir: /app
     links:
       - rabbitmq:rabbitmq
+    ports:
+      - 8000:8080
+    command: composer run --timeout=0 serve --dev
   rabbitmq:
     image: rabbitmq:3-with-delay
     build:
