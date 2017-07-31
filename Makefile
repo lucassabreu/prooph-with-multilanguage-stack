@@ -6,13 +6,13 @@ protobuf-generate:
 	protoc --proto_path=proto --php_out=proto/build/php-src proto/events.proto
 	protoc --proto_path=proto --php_out=proto/build/php-src proto/commands.proto
 
-protobuf-without-prooph: protobuf-generate
-	rm -rf ./without-prooph/proto
-	cp -r ./proto/build/php-src ./without-prooph/proto
+protobuf-prooph-producer: protobuf-generate
+	rm -rf ./prooph-producer/proto
+	cp -r ./proto/build/php-src ./prooph-producer/proto
 
-protobuf-with-prooph: protobuf-generate
-	rm -rf ./with-prooph/proto
-	cp -r ./proto/build/php-src ./with-prooph/proto
+protobuf-prooph-consumer: protobuf-generate
+	rm -rf ./prooph-consumer/proto
+	cp -r ./proto/build/php-src ./prooph-consumer/proto
 
-protobuf: protobuf-generate protobuf-with-prooph protobuf-without-prooph
+protobuf: protobuf-generate protobuf-prooph-consumer protobuf-prooph-producer
 
