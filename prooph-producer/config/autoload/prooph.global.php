@@ -5,16 +5,12 @@ return [
         'service_bus' => [
             'async_command_bus' => [
                 'router' => [
-                    'routes' => [
-                        '*' => 'humus_command_message_producer',
-                    ],
+                    'async_switch' => 'humus_command_message_producer',
                 ],
             ],
             'async_event_bus' => [
                 'router' => [
-                    'routes' => [
-                        '*' => [ 'humus_event_message_producer' ],
-                    ],
+                    'async_switch' => 'humus_event_message_producer',
                 ],
             ],
         ],

@@ -17,7 +17,23 @@ class CommandAction implements \Interop\Http\ServerMiddleware\MiddlewareInterfac
         \Psr\Http\Message\ServerRequestInterface $request,
         \Interop\Http\ServerMiddleware\DelegateInterface $delegate
     ) {
-        $this->commandBus->dispatch($request->getParsedBody());
-        return new JsonResponse($request->getParsedBody(), 200);
+        try {
+            $echoText = new \Hooks\Commands\EchoText;
+            $echoText->setText($request->getParsedBody()['text']);
+            $this->commandBus->dispatch(new \App\Commands\EchoTextCommand(
+                $echoText->serializeToString()
+            ));
+            return new JsonResponse([ 'success' => true ], 200);
+        } catch (\Exception $e) {
+            $return = [];
+            do {
+                $return[] = [
+                    'msg' => $e->getMessage(),
+                    'trace' => explode(PHP_EOL, $e->getTraceAsString()),
+                ];
+            } while ($e = $e->getPrevious());
+
+            return new JsonResponse($return, 403);
+        }
     }
 }
