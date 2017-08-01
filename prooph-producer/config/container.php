@@ -25,6 +25,10 @@ if (! empty($config['dependencies']['services'])
 // Inject factories
 foreach ($config['dependencies']['factories'] as $name => $object) {
     $container[$name] = function ($c) use ($object, $name) {
+        if (is_callable($object)) {
+            return call_user_func($object, $c, $name);
+        }
+
         if ($c->has($object)) {
             $factory = $c->get($object);
         } else {

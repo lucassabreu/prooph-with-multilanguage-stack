@@ -28,3 +28,5 @@
 
 $app->get('/', App\Action\HomePageAction::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
+$app->post('/hooks/command/{commandName}', App\Action\CommandAction::class, 'hooks.command');
+$app->post('/hooks/event/{eventName}', App\Action\EventAction::class, 'hooks.event');

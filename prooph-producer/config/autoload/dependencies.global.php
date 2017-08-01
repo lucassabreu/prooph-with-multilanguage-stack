@@ -34,6 +34,10 @@ return [
             Zend\Stratigility\Middleware\ErrorHandler::class => Container\ErrorHandlerFactory::class,
             Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
             Middleware\NotFoundHandler::class                => Container\NotFoundHandlerFactory::class,
+
+            // Action
+            \App\Action\CommandAction::class => \App\Action\CommandActionFactory::class,
+            \App\Action\EventAction::class => \App\Action\EventActionFactory::class,
         ],
     ],
 ];
